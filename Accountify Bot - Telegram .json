@@ -1,0 +1,3797 @@
+{
+  "name": "Accountify Bot - Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Ini versi jadi yak",
+        "height": 4256,
+        "width": 3920,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        64,
+        64
+      ],
+      "id": "394d110f-69db-460c-9edf-5c0c5b5692bc",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        192,
+        1840
+      ],
+      "id": "001f4266-ad3b-42d5-b1fd-b86bc51100a8",
+      "name": "Trigger When Chat",
+      "webhookId": "e8849693-cfd6-4be1-af19-d5d221ace161",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "userId",
+              "lookupValue": "={{ $json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        1840
+      ],
+      "id": "09c3f50c-fe89-4be2-b755-2de4d7ba3c4b",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2e7092e9-90a7-4197-ba45-84ec33a1cc6e",
+              "leftValue": "={{ $json.userStateStatus }}\n",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "40d3df9e-4a48-4973-a6da-ff579f450cc3",
+              "leftValue": "={{ $json.userStateStatus }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        1840
+      ],
+      "id": "db35ce09-31e6-432e-a44e-256dadacdef2",
+      "name": "Validate User Status"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+            "userStateStatus": "awaiting_choice"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "userId",
+              "displayName": "userId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "userStateStatus",
+              "displayName": "userStateStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1520,
+        2400
+      ],
+      "id": "b2a246c1-bee9-43b6-aa91-6d6cd98a7ada",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "746a7ca2-d922-4ecd-b5cf-0096ba35eb86",
+              "leftValue": "={{ $json[\"message\"][\"text\"].match(/^\\/start|halo|hi|hello/i) !== null }}\n",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        2480
+      ],
+      "id": "646d41eb-8a03-4aa9-ba9c-6cc923c3fe59",
+      "name": "Greeting Check"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Hello 👋! I'm Accountify AI, Your Finance Assistant.\nPlease choose one of these option by typing its number with upper coma (Example: \"1\"):\n\n1) Data Parsing (catat & simpan transaksi)\n2) Data Analysis (analisa laporanmu)\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        2400
+      ],
+      "id": "4c1c74c2-4f2e-4006-aa51-c25edc917508",
+      "name": "Send Greeting",
+      "webhookId": "2038217e-51f1-4b72-843f-1ac91f920652",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Please start chat with /start",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        2576
+      ],
+      "id": "2d7c1221-1010-4cb5-8051-cad7738a16e5",
+      "name": "Fallback",
+      "webhookId": "2038217e-51f1-4b72-843f-1ac91f920652",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 1,
+        "output": "="
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1136,
+        1664
+      ],
+      "id": "7d714a05-d7e3-480c-bf2a-a31ce4def81f",
+      "name": "State router"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.userStateStatus }}",
+                    "rightValue": "awaiting_choice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c56baa75-0f7c-4063-aa86-35ec44588a3c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "awaiting_choice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9db434eb-7895-4565-a614-91655890d9ef",
+                    "leftValue": "={{ $json.userStateStatus }}",
+                    "rightValue": "parsing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "parsing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f84e3bc9-3fcf-495d-a62a-db7d8e204cd3",
+                    "leftValue": "={{ $json.userStateStatus }}",
+                    "rightValue": "analysis",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "analysis"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1344,
+        1568
+      ],
+      "id": "9ab33a3e-900d-4d24-becb-d947f2b32579",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f2be5f69-bd44-482e-90a3-3be71f250c9c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b0adb2f3-8451-4825-b665-b9ba7cfadd07",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "=2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59f42433-cb24-4158-8a91-fb49088f62ad",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "=\"1\" || \"2\"",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "unknown_option"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2192,
+        256
+      ],
+      "id": "202c20bd-c2ec-460c-99e6-705e49889fd7",
+      "name": "Case awaiting_choice"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userId": "={{ $('Get row(s) in sheet').item.json.userId }}",
+            "userStateStatus": "parsing"
+          },
+          "matchingColumns": [
+            "userId"
+          ],
+          "schema": [
+            {
+              "id": "userId",
+              "displayName": "userId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userStateStatus",
+              "displayName": "userStateStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2400,
+        96
+      ],
+      "id": "4c853f39-6ab8-4691-9797-feca55148b61",
+      "name": "update to parsing",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userId": "={{ $('Get row(s) in sheet').item.json.userId }}",
+            "userStateStatus": "analysis"
+          },
+          "matchingColumns": [
+            "userId"
+          ],
+          "schema": [
+            {
+              "id": "userId",
+              "displayName": "userId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userStateStatus",
+              "displayName": "userStateStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2400,
+        256
+      ],
+      "id": "d81f3381-9a2b-457b-942c-e101f457004f",
+      "name": "update to analysis",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Please input the valid format :D",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2400,
+        400
+      ],
+      "id": "0ecd7cf1-61cf-450d-8226-bc23053bd823",
+      "name": "Warn user",
+      "webhookId": "a65d7579-7a0d-418d-b20d-6eb9fd23346f",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2944,
+        736
+      ],
+      "id": "1a6c072b-1c77-4598-a1fb-3cc4c3621d10",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Aight! Silakan ketik data transaksi kamu.\nContoh:\n\n\"Tanggal 1 Oktober 2025 saya jual 5 risol harga 10.000 per pcs, modal 5.000, total 50.000\"\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2640,
+        96
+      ],
+      "id": "475f5480-ab2c-44d3-a043-21d50f70ec8a",
+      "name": "Command User to give parse",
+      "webhookId": "a65d7579-7a0d-418d-b20d-6eb9fd23346f",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Aku siap bantu menganalisis data transaksi dari Google Sheet-mu dan memberikan insight yang bisa langsung kamu pakai!\nSilakan pilih bagian yang ingin kamu analisa:\n(Ketik angka sesuai pilihan, contoh: 1)\n\n1️⃣ Deskripsi Keuangan\n2️⃣ Insight Bisnis\n3️⃣ Prediksi Keuangan\n4️⃣ Rekomendasi Aksi\n5️⃣ Kesimpulan\n6️⃣ Analisis Arus Kas\n7️⃣ Efisiensi Operasional\n8️⃣ Analisis Pelanggan\n9️⃣ Deteksi Anomali\n🔟 Simulasi Keputusan",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2672,
+        272
+      ],
+      "id": "cc8a45e4-bbfe-47b0-8288-9cd72a8cd876",
+      "name": "Command user to choose what to analyzed",
+      "webhookId": "a65d7579-7a0d-418d-b20d-6eb9fd23346f",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Trigger When Chat').item.json.message.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Kamu adalah parser keuangan.\nketika kamu menemukan kata seperti rb/k, ganti ke ribu dan dengna format 000, begitu juga dengan jt/juta,\n\ndan gunakan HTML di respon kamu dan no markdown\ndan gunakan html dibawah ini:\nTeks Tebal: <b> atau <strong> (Contoh: <b>teks tebal</b>)\n\nTeks Miring: <i> atau <em> (Contoh: <i>teks miring</i>)\n\nTeks Bergaris Bawah: <u> atau <ins> (Contoh: <u>teks bergaris bawah</u>)\n\nTeks Coret: <s>, <strike>, atau <del> (Contoh: <s>teks coret</s>)\n\nTeks Sembunyi (Spoiler): <span class=\"tg-spoiler\">...</span> (Contoh: <span class=\"tg-spoiler\">teks rahasia</span>)\n\nHyperlink (URL Sebaris): <a href=\"URL\">...</a> (Contoh: <a href=\"https://www.google.com\">klik di sini</a>)\n\nKode Sebaris: <code> (Contoh: Gunakan perintah <code>/start</code>)\n\nBlok Kode Pra-format: <pre> (Contoh: <pre>cetak('halo dunia')</pre>)\n\nBlok Kode dengan Bahasa: <pre><code class=\"language-python\">...</code></pre> (Contoh: <pre><code class=\"language-python\">def main():\\n pass</code></pre>)\n\nketika user mengetik Hari ini, gunakan tanggal hari ini dan convert formatnya dengan tanggal NamaBulan tahun, contoh: 18 November 2025\n\nuntuk harga ribuan, tidak usah menggunakan titik dan hanya generate angkanya saja, contoh 5rb jadi 5000\n\nsebaiknya untuk nilai plus, tidak usah memakai tag apapun"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2960,
+        592
+      ],
+      "id": "b66f1d87-dfba-41a5-a0ff-525eb33e15fa",
+      "name": "Parser Ai Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1200
+      ],
+      "id": "e596ad1f-e03c-43c9-b75d-7ca611dd3b7b",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analisis data transaksi berikut dari Google Sheet. Hitung total pendapatan, total pengeluaran, total profit/loss, dan margin keuntungan secara keseluruhan serta per periode (mingguan/bulanan). Tampilkan hasilnya dalam format yang mudah dipahami dan berikan penjelasan singkat mengenai kondisi keuangan saat ini.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        1072
+      ],
+      "id": "e77e0880-de00-4b2c-b247-b7b210e425ff",
+      "name": "Analyst Ai Agent1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tanggal": "={{ $json.output.tanggal }}",
+            "item": "={{$json.output.item}}",
+            "harga_satuan": "={{ $json.output.harga_satuan }}",
+            "jumlah": "={{ $json.output.jumlah }}",
+            "modal": "={{ $json.output.modal }}",
+            "total": "={{ $json.output.total }}",
+            "kategori": "={{ $json.output.kategori }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tanggal",
+              "displayName": "tanggal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "item",
+              "displayName": "item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jumlah",
+              "displayName": "jumlah",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "harga_satuan",
+              "displayName": "harga_satuan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "modal",
+              "displayName": "modal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total",
+              "displayName": "total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "kategori",
+              "displayName": "kategori",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3360,
+        592
+      ],
+      "id": "0e8bf74f-e1b5-48e8-b604-72d7692f4685",
+      "name": "Append data after parsing",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=✅ Transaksi berhasil dicatat! \nTanggal: {{ $('Parser Ai Agent').item.json.output.tanggal }}\nItem: {{ $('Parser Ai Agent').item.json.output.item }}\nJumlah: {{ $('Parser Ai Agent').item.json.output.jumlah }}\nharga_satuan:{{ $('Parser Ai Agent').item.json.output.harga_satuan }}\nmodal: {{ $('Parser Ai Agent').item.json.output.modal }}\ntotal: {{ $('Parser Ai Agent').item.json.output.total }}\nkategori: {{ $('Parser Ai Agent').item.json.output.kategori }}\n\ndata di append ke sheets:\nhttps://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?gid=0#gid=0\n",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3568,
+        592
+      ],
+      "id": "8ae46697-692c-4312-a5b5-0394d6271f59",
+      "name": "Send succes message",
+      "webhookId": "8fecef5e-d2f5-47a7-aa9c-70365f299cc8",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1I_U8moXruX-b93acwRtWlgtnGnMc8QsPKuYIEzzKqgo",
+          "mode": "list",
+          "cachedResultName": "userState",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1I_U8moXruX-b93acwRtWlgtnGnMc8QsPKuYIEzzKqgo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1969840694,
+          "mode": "list",
+          "cachedResultName": "userState",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1I_U8moXruX-b93acwRtWlgtnGnMc8QsPKuYIEzzKqgo/edit#gid=1969840694"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "userId": "={{ $('Get row(s) in sheet').item.json.userId }}",
+            "userStateStatus": "="
+          },
+          "matchingColumns": [
+            "userId"
+          ],
+          "schema": [
+            {
+              "id": "userId",
+              "displayName": "userId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userStateStatus",
+              "displayName": "userStateStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4816,
+        2096
+      ],
+      "id": "67325143-eab0-4c5d-a698-eda235bda804",
+      "name": "Update User State Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3264,
+        1232
+      ],
+      "id": "970b16ed-0a45-4042-a984-584e2ca97afe",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3552,
+        1072
+      ],
+      "id": "ddd484b5-add7-4226-9714-92484028fab7",
+      "name": "Send analysis result",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1744,
+        1984
+      ],
+      "id": "71b795a2-63a0-4a24-a12a-834ebf09a9d4",
+      "name": "Reset User State",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "BUG 1:\n USER STATE MANAGEMENT\n\nPada bagian UserState itu tidak berjalan dengan baik\nterutama pada saat user sudah selesai pakai layanan, itu tetep ada si useridnya dan statenya udah kosong\n\ntapi, pas user pakai lagi itu malah dibuat lagi useridnya dan terjadi duplikasi userId dan akhirnya sistem bingung baca state user\n",
+        "height": 240,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "91bf46cd-d3d8-4d2e-b4db-a80e7c13097a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "SOLUSI BUG 1:\n USER STATE MANAGEMENT\n",
+        "height": 240,
+        "width": 400,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "bc15b207-9cb3-448f-a978-07cb9f8d8f26",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"tanggal\": \"1 Oktober 2025\",\n    \"item\": \"risol\",\n\t\"jumlah\": \"5\",\n    \"harga_satuan\": \"10000\",\n    \"modal\":\"5000\",\n    \"total\":\"50000\",\n    \"kategori\":\"makanan\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3216,
+        736
+      ],
+      "id": "f29a625d-be67-4d09-9f79-600a1979c056",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "Fitur\n\nkurang di bagian profit loss and margin"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        944
+      ],
+      "id": "f00a6188-fdbb-45a9-895f-d689291026cf",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2848,
+        1072
+      ],
+      "id": "723f3488-d608-4d0a-b23f-58198436181f",
+      "name": "Send a text message",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU",
+          "mode": "list",
+          "cachedResultName": "userStateDatabase",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13zvjudWiFZE5n5_rxxjJD9HpRgmWabkNfXmtqlbSruU/edit#gid=0"
+        },
+        "startIndex": "=2"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2864,
+        880
+      ],
+      "id": "97cd8808-a5b3-45da-83d1-2944f2b15781",
+      "name": "Reset User State1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Yang bisa diperbaiki:\n\ncara botnya ngomong\n\njangan kaku, kalau bisa buat botnya seperti mentor yang bisa mengelaborasikan ide, insight dll degnan bahasa yang sederhana, singkat dan jelas\nsebisa mungkin intinya buat bot ini kaya \"temen\" nyantui yang bermanfaat lah",
+        "height": 224,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        48,
+        3408
+      ],
+      "id": "32099ea2-a51e-455b-8a5a-5ae6943502fe",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "Yang bisa diperbaiki:\n\nkategori auto ngerti\n\njangan kaku, kalau bisa buat botnya seperti mentor yang bisa mengelaborasikan ide, insight dll degnan bahasa yang sederhana, singkat dan jelas\nsebisa mungkin intinya buat bot ini kaya \"temen\" nyantui yang bermanfaat lah",
+        "height": 224,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        3408
+      ],
+      "id": "327a1f12-81d9-47da-afad-558799b09f67",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "Fitur\n\nedit\n\nbisa ngedit data yang typo pake transacrtionId\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1136
+      ],
+      "id": "9c22a06f-0c1b-44d5-bad7-4808bea6a4eb",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "Fitur\n\ncondisi abis selesai di 1 fitur\n\noke abis pake 1 fitur, langsung aja buat user bisa milih message\n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1360
+      ],
+      "id": "69a408a9-f0b9-4f2b-8b64-aa00cb323cf3",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "BUG 1:\n Prompt message\n\nkaga bisa pake tag UL \n",
+        "height": 240,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        976,
+        0
+      ],
+      "id": "4db229d8-8574-45aa-87c6-8f26fe4043bd",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fe5d9fb3-2c74-4178-8c06-bd167b203409",
+              "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+              "rightValue": "Stop",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2096,
+        768
+      ],
+      "id": "102cb30c-0bb5-4a36-9ac8-ee4daa2ad956",
+      "name": "user still parsing?"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Ada yang mau di parsing lagi?\nJika iya, langsung tulis saja kalimat yang mau di parse\n\nKalau tidak, ketik Stop",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3776,
+        592
+      ],
+      "id": "51bc0447-5bae-4744-8aa8-d4cd644c2ba3",
+      "name": "Send a text message1",
+      "webhookId": "996cecc8-2c65-4f64-8743-cd34ef2e45b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Sip, balik ke menu default",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3088,
+        880
+      ],
+      "id": "a578bfb3-091e-4079-9128-ba216b3c7972",
+      "name": "Send a text message2",
+      "webhookId": "996cecc8-2c65-4f64-8743-cd34ef2e45b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        3104,
+        752
+      ],
+      "id": "6760df33-6def-4b6d-a6ed-7032e7d84b2e",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b5bcf112-7cbc-4e9e-bf10-4b6328ec6515",
+              "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+              "rightValue": "Stop",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1584,
+        1776
+      ],
+      "id": "26b6a69d-e3b4-4acb-8942-c93bc2b7505e",
+      "name": "User Still want to analyze?"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Sip, balik ke menu default",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1888,
+        2208
+      ],
+      "id": "88614bbf-b8a0-472a-8354-853f0324cbed",
+      "name": "Send a text message3",
+      "webhookId": "996cecc8-2c65-4f64-8743-cd34ef2e45b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4240,
+        2560
+      ],
+      "id": "07ce5c37-3804-4c82-a64c-9318cc06b3ca",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        4528,
+        2544
+      ],
+      "id": "ec1ab590-574b-4de1-aa9f-0df3e5cbdb2c",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"deskripsi_keuangan\": \"Totalnya berapa lossnya marginnya berapa\",\n\t\"insight\": \"insight dari deskripsi keuangannya gimana, penjualan yang paling tinggi apa dan kapan dsbgainya\",\n  \"prediksi\": \"prediksi outcome / possibility yang bisa terjadi berdasarkan insight \",\n  \"rekomendasi\":\"berikan rekomendasi rekomendasi dengan solusi nyata yang applicable\",\n  \"kesimpulan\":\"kesimpulan yang mudah dimengerti dan menerapkan prinsip achieveable(dapat diraih secara nyata), reality(ide yang realistis), dan deskriptif\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4384,
+        2592
+      ],
+      "id": "ab1d7f4a-17ad-48d0-b336-5417c59e3d21",
+      "name": "Structured Output Parser2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Kamu adalah analis keuangan.\nbertindaklah sebagai seorang data analyst yang memberikan insight bisnis berdasarkan data yang memberikan insight bermanfaat dan berikan total loss profit & margin, rekomendasi, prediksi, kesimpulan yang mudah dimengerti dan menerapkan prinsip achieveable(dapat diraih secara nyata), reality(ide yang realistis), dan deskriptif",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "gunakan HTML di respon kamu dan no markdown\nnote: jangan pakai tag <p>,<br>,<ol> dan sebagainya, dan hanya sesuai dengan kriteria dibawah!\ndan gunakan html dibawah ini:\n\nTeks Tebal: <b> atau <strong> (Contoh: <b>teks tebal</b>)\n\nTeks Miring: <i> atau <em> (Contoh: <i>teks miring</i>)\n\nTeks Bergaris Bawah: <u> atau <ins> (Contoh: <u>teks bergaris bawah</u>)\n\nTeks Coret: <s>, <strike>, atau <del> (Contoh: <s>teks coret</s>)\n\nTeks Sembunyi (Spoiler): <span class=\"tg-spoiler\">...</span> (Contoh: <span class=\"tg-spoiler\">teks rahasia</span>)\n\nHyperlink (URL Sebaris): <a href=\"URL\">...</a> (Contoh: <a href=\"https://www.google.com\">klik di sini</a>)\n\nKode Sebaris: <code> (Contoh: Gunakan perintah <code>/start</code>)\n\nBlok Kode Pra-format: <pre> (Contoh: <pre>cetak('halo dunia')</pre>)\n\nBlok Kode dengan Bahasa: <pre><code class=\"language-python\">...</code></pre> (Contoh: <pre><code class=\"language-python\">def main():\\n pass</code></pre>)\n\nnote: jangan pakai tag <p>,<br>,<ol> dan sebagainya, dan hanya sesuai dengan kriteria diatas!"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        4336,
+        2336
+      ],
+      "id": "d4f8f6a3-f706-4b1e-8c89-1dfed6ad9b8f",
+      "name": "Analyst Ai Agent yang dulu",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "Buangan",
+        "height": 704,
+        "width": 1104
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4016,
+        2032
+      ],
+      "id": "47d7ccf3-77da-4687-bae1-28c6c8cf151c",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f2be5f69-bd44-482e-90a3-3be71f250c9c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b0adb2f3-8451-4825-b665-b9ba7cfadd07",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "=2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59f42433-cb24-4158-8a91-fb49088f62ad",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "=3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d938b176-9154-4e2a-b5a5-392414bfc7e4",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "4",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_4"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1b705bac-41d9-4e78-8da5-afcaf7e63e31",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "5",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_5"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7f57623e-90e7-4d57-8bed-10b8c3e8891e",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "6",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_6"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5fe54f2d-cc68-47ce-9a2c-48ca48e044d6",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "7",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_7"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1427fd50-4394-4de7-bcc1-1c2c528241c1",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "8",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_8"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1abdb0a3-e8e4-4090-aead-9d1e864b039b",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "9",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_9"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c91102f3-e177-42ee-8b0d-9b108b8804e7",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "10",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "option_10"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1169dde-96af-44e2-ad21-d976a3354d60",
+                    "leftValue": "={{ $('Trigger When Chat').item.json.message.text }}",
+                    "rightValue": "=\"1\" || \"2\" || \"3\" || \"4\" || \"5\" || \"6\" || \"7\" || \"8\" || \"9\" || \"10\"",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "unknown choice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2016,
+        1728
+      ],
+      "id": "28bcc22d-0ec1-40f7-a29a-064fb0947055",
+      "name": "case analyze"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1536
+      ],
+      "id": "650e6ba3-53a4-4d83-9e20-d437f88cf8d4",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Berdasarkan data transaksi, berikan insight mendalam tentang performa bisnis. Jelaskan tren penjualan, produk atau kategori dengan penjualan tertinggi, periode waktu dengan performa terbaik, dan pola perilaku pelanggan. Sertakan juga faktor-faktor yang mungkin mempengaruhi hasil tersebut.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas\n\n\ndan gunakan HTML di respon kamu dan no markdown\ndan gunakan html dibawah ini:\nTeks Tebal: <b> atau <strong> (Contoh: <b>teks tebal</b>)\n\nTeks Miring: <i> atau <em> (Contoh: <i>teks miring</i>)\n\nTeks Bergaris Bawah: <u> atau <ins> (Contoh: <u>teks bergaris bawah</u>)\n\nTeks Coret: <s>, <strike>, atau <del> (Contoh: <s>teks coret</s>)\n\nTeks Sembunyi (Spoiler): <span class=\"tg-spoiler\">...</span> (Contoh: <span class=\"tg-spoiler\">teks rahasia</span>)\n\nHyperlink (URL Sebaris): <a href=\"URL\">...</a> (Contoh: <a href=\"https://www.google.com\">klik di sini</a>)\n\nKode Sebaris: <code> (Contoh: Gunakan perintah <code>/start</code>)\n\nBlok Kode Pra-format: <pre> (Contoh: <pre>cetak('halo dunia')</pre>)\n\nBlok Kode dengan Bahasa: <pre><code class=\"language-python\">...</code></pre> (Contoh: <pre><code class=\"language-python\">def main():\\n pass</code></pre>)\n\nketika user mengetik Hari ini, gunakan tanggal hari ini dan convert formatnya dengan tanggal NamaBulan tahun, contoh: 18 November 2025\n\n\nsebaiknya untuk nilai plus, tidak usah memakai tag apapun"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3120,
+        1376
+      ],
+      "id": "3a6527fe-f8c2-4bd8-aa14-019f4f357706",
+      "name": "Analyst Ai Agent"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3216,
+        1536
+      ],
+      "id": "363ce6de-c063-409b-b68b-f72b88517793",
+      "name": "Get row(s) in sheet in Google Sheets2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3536,
+        1376
+      ],
+      "id": "745fda4f-da40-471d-bd5d-c2ca432151fa",
+      "name": "Send analysis result1",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2832,
+        1376
+      ],
+      "id": "48e1607b-d256-49e3-87f3-1febeb179b18",
+      "name": "Send a text message4",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1840
+      ],
+      "id": "b5461dfd-965a-4657-9141-40f9a219162a",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Gunakan data historis untuk memprediksi potensi outcome yang mungkin terjadi di bulan atau kuartal berikutnya. Sebutkan kemungkinan peningkatan atau penurunan penjualan, potensi cash flow, dan perkiraan margin laba. Jelaskan asumsi dasar yang digunakan untuk prediksi tersebut.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas\n\n\ndan gunakan HTML di respon kamu dan no markdown\ndan gunakan html dibawah ini:\nTeks Tebal: <b> atau <strong> (Contoh: <b>teks tebal</b>)\n\nTeks Miring: <i> atau <em> (Contoh: <i>teks miring</i>)\n\nTeks Bergaris Bawah: <u> atau <ins> (Contoh: <u>teks bergaris bawah</u>)\n\nTeks Coret: <s>, <strike>, atau <del> (Contoh: <s>teks coret</s>)\n\nTeks Sembunyi (Spoiler): <span class=\"tg-spoiler\">...</span> (Contoh: <span class=\"tg-spoiler\">teks rahasia</span>)\n\nHyperlink (URL Sebaris): <a href=\"URL\">...</a> (Contoh: <a href=\"https://www.google.com\">klik di sini</a>)\n\nKode Sebaris: <code> (Contoh: Gunakan perintah <code>/start</code>)\n\nBlok Kode Pra-format: <pre> (Contoh: <pre>cetak('halo dunia')</pre>)\n\nBlok Kode dengan Bahasa: <pre><code class=\"language-python\">...</code></pre> (Contoh: <pre><code class=\"language-python\">def main():\\n pass</code></pre>)\n\nketika user mengetik Hari ini, gunakan tanggal hari ini dan convert formatnya dengan tanggal NamaBulan tahun, contoh: 18 November 2025\n\n\nsebaiknya untuk nilai plus, tidak usah memakai tag apapun"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        1712
+      ],
+      "id": "dc3b2113-27aa-4dc5-a24e-ad632d4320a6",
+      "name": "Analyst Ai Agent2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3264,
+        1872
+      ],
+      "id": "94fe80dc-594a-445a-9888-f4f13997fbc3",
+      "name": "Get row(s) in sheet in Google Sheets3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3552,
+        1712
+      ],
+      "id": "f03e80fe-55ee-457d-9502-96a3ae955a7d",
+      "name": "Send analysis result2",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2848,
+        1712
+      ],
+      "id": "d512f8ab-82cd-4309-9c53-3c4ad057019c",
+      "name": "Send a text message5",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        2144
+      ],
+      "id": "e7347ce5-b9c6-48db-99d0-ff6d84280c42",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Berdasarkan insight dan prediksi, berikan rekomendasi yang realistis dan dapat langsung diterapkan untuk meningkatkan profit, efisiensi biaya, atau stabilitas cash flow. Jelaskan langkah-langkah konkrit yang bisa dilakukan oleh tim bisnis untuk memperbaiki performa.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        2016
+      ],
+      "id": "8b6c6915-0e20-4d51-9be0-d8991adda68a",
+      "name": "Analyst Ai Agent3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3264,
+        2176
+      ],
+      "id": "55418041-d89d-4cda-9188-cacd17c9628c",
+      "name": "Get row(s) in sheet in Google Sheets4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3552,
+        2016
+      ],
+      "id": "5f8e7e37-507f-4bf1-afd9-ab63a5a8746a",
+      "name": "Send analysis result3",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2848,
+        2016
+      ],
+      "id": "80442427-4688-4066-b8d3-0135ea765943",
+      "name": "Send a text message6",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        2464
+      ],
+      "id": "665e7e28-82e3-4b67-a77b-5520105a021b",
+      "name": "Google Gemini Chat Model9",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Buat kesimpulan yang ringkas, mudah dimengerti, dan menggambarkan kondisi keuangan bisnis secara keseluruhan. Gunakan prinsip achievable, reality, dan descriptive dalam penyampaian agar hasilnya bisa dijadikan dasar pengambilan keputusan nyata.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        2336
+      ],
+      "id": "a71099d7-4301-40b2-989e-b05411811f4a",
+      "name": "Analyst Ai Agent4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3264,
+        2496
+      ],
+      "id": "374ad0c1-3314-49cd-93c8-c97b7c4660f3",
+      "name": "Get row(s) in sheet in Google Sheets5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3552,
+        2336
+      ],
+      "id": "818964c5-7112-45f4-a4d9-d34a5dcace1f",
+      "name": "Send analysis result4",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2848,
+        2336
+      ],
+      "id": "aa532209-8cfc-4710-92bb-15b81da51837",
+      "name": "Send a text message7",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        2800
+      ],
+      "id": "1e237950-7c63-490a-a8ac-cebe02261c87",
+      "name": "Google Gemini Chat Model10",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analisis arus kas bisnis berdasarkan data transaksi. Jelaskan seberapa sehat arus kas saat ini, rasio cash-in vs cash-out, dan deteksi apakah bisnis berisiko mengalami defisit kas di periode mendatang.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3152,
+        2672
+      ],
+      "id": "aa42c03f-3066-427c-a5df-e4f4aa4d42a8",
+      "name": "Analyst Ai Agent5"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3280,
+        2832
+      ],
+      "id": "1c33366a-076d-4c0e-902a-de822ab5dc53",
+      "name": "Get row(s) in sheet in Google Sheets6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3568,
+        2672
+      ],
+      "id": "aa9cdca5-5684-4c87-bed6-8dbacd1f1f05",
+      "name": "Send analysis result5",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2864,
+        2672
+      ],
+      "id": "26fc4f1a-ab62-4207-8d1c-ef3bc2177167",
+      "name": "Send a text message8",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        3136
+      ],
+      "id": "6be41280-79be-448c-ae26-9cd5985300a4",
+      "name": "Google Gemini Chat Model11",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Ukur efisiensi operasional bisnis dengan membandingkan biaya terhadap pendapatan (cost-to-revenue ratio). Tunjukkan area biaya terbesar dan potensi penghematan tanpa mengorbankan performa penjualan.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3152,
+        3008
+      ],
+      "id": "9281e088-cd5a-470c-967d-203f5f9eb759",
+      "name": "Analyst Ai Agent6"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3280,
+        3168
+      ],
+      "id": "2d8081b3-fbf0-4070-ba9a-c6ae37d9cea2",
+      "name": "Get row(s) in sheet in Google Sheets7",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3568,
+        3008
+      ],
+      "id": "0d5832eb-f098-4d13-b932-9689ddc79653",
+      "name": "Send analysis result6",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2864,
+        3008
+      ],
+      "id": "e5cf29cf-60bc-4fca-a07c-2a55ab2c29ba",
+      "name": "Send a text message9",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3152,
+        3456
+      ],
+      "id": "ae225643-aa78-44a0-8b62-47520c71aef8",
+      "name": "Google Gemini Chat Model12",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analisis perilaku pelanggan dari data transaksi: seberapa sering mereka bertransaksi, rata-rata nilai transaksi, dan pelanggan paling loyal. Berikan insight untuk meningkatkan retensi pelanggan.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3168,
+        3328
+      ],
+      "id": "5f61fb90-b08b-452d-b7c7-e47aa5766513",
+      "name": "Analyst Ai Agent7"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3296,
+        3488
+      ],
+      "id": "6e6dbec3-efdf-4b1c-b31d-fbb771da626d",
+      "name": "Get row(s) in sheet in Google Sheets8",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3584,
+        3328
+      ],
+      "id": "e833554f-8fa0-44cd-86df-1ecb70f9642a",
+      "name": "Send analysis result7",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2880,
+        3328
+      ],
+      "id": "3a447a40-65af-48ae-b6eb-8afc2261c85e",
+      "name": "Send a text message10",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3168,
+        3776
+      ],
+      "id": "bce6f0cb-e9b0-432e-9c71-66d3eb9f16d1",
+      "name": "Google Gemini Chat Model13",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Identifikasi transaksi yang tidak biasa atau menyimpang dari pola normal (misalnya jumlah besar tiba-tiba, tanggal tidak wajar, atau tren yang tidak konsisten). Berikan alert dan kemungkinan penyebabnya.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3184,
+        3648
+      ],
+      "id": "15ddc4b5-c4d3-4c8e-b5fa-32ae2330cd32",
+      "name": "Analyst Ai Agent8"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3312,
+        3808
+      ],
+      "id": "98b98bf2-a203-41bd-9a71-5fc0650197de",
+      "name": "Get row(s) in sheet in Google Sheets9",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        3648
+      ],
+      "id": "f3fca9f4-e518-4c25-a60c-b9f450fb4483",
+      "name": "Send analysis result8",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2896,
+        3648
+      ],
+      "id": "725ea124-49ff-4c84-be3c-acc63206a28e",
+      "name": "Send a text message11",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3168,
+        4096
+      ],
+      "id": "abc0737a-5db0-4bb9-ba69-2317f08bad23",
+      "name": "Google Gemini Chat Model14",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gmAL1V4SFOjYkKWP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Simulasikan skenario “what-if” berdasarkan data keuangan. Misalnya, apa yang terjadi jika biaya operasional naik 10%, atau jika promosi meningkatkan penjualan 20%. Tampilkan dampaknya terhadap margin dan profit.",
+        "options": {
+          "systemMessage": "Kamu seorang Data analyst handal yang berperan dalam membantu menganalisa data bisnis, target kamu itu adalah gen z, jadi jelasin dengan bahasa yang jelas, singkat, sederhana dan ringkas"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3184,
+        3968
+      ],
+      "id": "d2c362a5-76e0-43fa-8bab-a12794d5cac3",
+      "name": "Analyst Ai Agent9"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM",
+          "mode": "list",
+          "cachedResultName": "transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l0KIDb5ouRv_pjjQZq-XDOP5TgHD15zRDG3AwhpBErM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3312,
+        4128
+      ],
+      "id": "27cb11a9-32c2-4ed6-83de-22f0be249534",
+      "name": "Get row(s) in sheet in Google Sheets10",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "f4TGohaFSalFCXk6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        3968
+      ],
+      "id": "b5a86f63-3f95-43d6-97ea-59b9195bde4b",
+      "name": "Send analysis result9",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "Analyzing...., tunggu sebentar",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2896,
+        3968
+      ],
+      "id": "db533a9c-6949-41b3-be67-de76bd407625",
+      "name": "Send a text message12",
+      "webhookId": "94fc5629-3995-4902-9fc8-81a7cb76c324",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Plis input format valid sesuai ketentuan diatas :D",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2208,
+        2432
+      ],
+      "id": "f6f4013f-b292-4af1-b38a-a38e456f4bbe",
+      "name": "Send a text message13",
+      "webhookId": "996cecc8-2c65-4f64-8743-cd34ef2e45b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger When Chat').item.json.message.from.id }}",
+        "text": "=Adalagi yang mau di analisa? langsung ketik nomor opsi yang diinginkan kalau ada\n\nkalau tidak, ketik Stop",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3808,
+        2048
+      ],
+      "id": "6db45614-1fee-48c3-92d7-26245fc479c2",
+      "name": "Send analysis result10",
+      "webhookId": "f0a40ed0-8d3f-4cee-9b3e-0afe81320815",
+      "credentials": {
+        "telegramApi": {
+          "id": "DZAfIU3LxylYL0xG",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Trigger When Chat": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Validate User Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate User Status": {
+      "main": [
+        [
+          {
+            "node": "State router",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Greeting Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Greeting Check": {
+      "main": [
+        [
+          {
+            "node": "Send Greeting",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Greeting": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "State router": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Case awaiting_choice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "user still parsing?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "User Still want to analyze?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Case awaiting_choice": {
+      "main": [
+        [
+          {
+            "node": "update to parsing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "update to analysis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Warn user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parser Ai Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update to parsing": {
+      "main": [
+        [
+          {
+            "node": "Command User to give parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update to analysis": {
+      "main": [
+        [
+          {
+            "node": "Command user to choose what to analyzed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Ai Agent": {
+      "main": [
+        [
+          {
+            "node": "Append data after parsing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append data after parsing": {
+      "main": [
+        [
+          {
+            "node": "Send succes message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send succes message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parser Ai Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "user still parsing?": {
+      "main": [
+        [
+          {
+            "node": "Parser Ai Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reset User State1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset User State1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "ai_tool": [
+        [
+          {
+            "node": "Parser Ai Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Still want to analyze?": {
+      "main": [
+        [
+          {
+            "node": "case analyze",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reset User State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset User State": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "case analyze": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message12",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets2": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message4": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent2": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets3": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message5": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent3": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets4": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message6": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent4": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets5": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent4",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message7": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model10": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent5": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets6": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent5",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message8": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model11": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent6",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent6": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets7": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent6",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message9": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model12": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent7",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent7": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets8": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent7",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message10": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model13": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent8",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent8": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets9": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent8",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message11": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model14": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analyst Ai Agent9",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyst Ai Agent9": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets10": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analyst Ai Agent9",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message12": {
+      "main": [
+        [
+          {
+            "node": "Analyst Ai Agent9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result1": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result2": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result3": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result4": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result5": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result6": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result7": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result8": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send analysis result9": {
+      "main": [
+        [
+          {
+            "node": "Send analysis result10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "96e94ed7-9f70-4610-81a4-498f9bd729a5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "66c2eae9977a895c5cd992836175f42503b73ad28aca62e05bb77e6770c03ecd"
+  },
+  "id": "G4q4dKIheDFABSnF",
+  "tags": []
+}
